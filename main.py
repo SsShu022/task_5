@@ -80,6 +80,7 @@ while dead == False:
                     print("Oh dear, you lost the fight.")
                     print("That's the end of the game")
                     dead = True
+
             else:
                 print("You don't have a " + fight_with)
         else:
