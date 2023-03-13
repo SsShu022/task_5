@@ -8,8 +8,14 @@ class Item:
     def set_description(self, description):
         self.description = description
 
-    def set_item(self):
-        pass
+    def describe(self):
+        print(f'The [{self.item}] is here - {self.description}')
+
+    def set_item(self, item):
+        self.item = item
+
+    def get_name(self):
+        return self.item
 
 
 
@@ -51,9 +57,6 @@ class Enemy:
 
 
 
-
-
-
 class Room:
     """
     Class Room
@@ -87,7 +90,9 @@ class Room:
         print(self.room)
         print('--------------------')
         print(self.description)
-        print(f'The {self.sides[0][0]} is {self.sides[0][1]}')
+        l_n = len(self.sides)
+        for i in range(l_n, -1, -1):
+            print(f'The {self.sides[i][0].room} is {self.sides[i][1]}')
 
     def get_character(self):
         return self.character
@@ -101,12 +106,10 @@ class Room:
                 return lst[0]
 
 
-
-
-
-
 class Friend:
-    pass
+    def __init__(self, friend) -> None:
+        self.friend = friend
+
 
 class Character:
     pass
