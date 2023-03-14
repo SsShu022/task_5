@@ -1,6 +1,7 @@
 """Game"""
 KILL_ENEMY = 0
 class Character:
+    """Parent class for friend and enemy"""
     def __init__(self, name, description) -> None:
         self.name = name
         self.description = description
@@ -78,9 +79,6 @@ class Friend(Character):
             return True
         return False
 
-
-
-
     def talk(self):
         """"Prints friend's lines"""
         print(f'[{self.name}] каже: {self.conversation}')
@@ -107,15 +105,9 @@ class Item:
         """Returns name of the item"""
         return self.item
 
-# class Veapon(Item):
-#     pass
-
-# class Support(Item):
-#     pass
-
-
 
 class Street:
+    """Street class"""
     def __init__(self, street) -> None:
         self.street = street
         self.description = None

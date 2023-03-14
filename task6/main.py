@@ -29,12 +29,6 @@ thief.set_conversation("Добрі гнроші зараз треба...")
 thief.set_weakness("брелок")
 street.set_character(thief)
 
-# drunkard = my_game.Enemy("П'яничка", "Той самий друг, який ніколи не знає міри...")
-# drunkard.set_conversation("Ти! А ну Йди сюди!")
-# drunkard.set_weakness("вода")
-# square.set_character(drunkard)
-
-
 ids = my_game.Item("паспорт")
 ids.set_description("Те, що ніколи не варто забувати у друга вдома")
 square.set_item(ids)
@@ -42,10 +36,6 @@ square.set_item(ids)
 keychain = my_game.Item("брелок")
 keychain.set_description("Звичайний брелок, який наспрадві є сигналізацією")
 centre.set_item(keychain)
-
-# water = my_game.Item("вода")
-# water.set_description("Тамує мпрагу та приаодить до тями в певних ситуаціях")
-# street.set_item(water)
 
 key = my_game.Item("ключі")
 key.set_description("Знайомі ключі з емблемою колегіуму...")
@@ -57,6 +47,8 @@ current_room = centre
 backpack = []
 
 dead = False
+# Variable for friend's need check
+service = False
 
 while dead == False:
 
@@ -80,12 +72,27 @@ while dead == False:
         # Talk to the inhabitant - check whether there is one!
         if inhabitant is not None:
             inhabitant.talk()
+    # Command give to help friend (only for friends)
+    elif command == "дати":
+        while service is False:
+            if isinstance(inhabitant, my_game.Friend) is True:
+                print('Що Ви хочете дати?')
+                give_item = input()
 
-    # elif command == "дати":
-    #     if isinstance(inhabitant, my_game.Friend) is True:
-    #         print('Що Ви хочете дати?')
-    #         if inhabitant.give() is True:
-                
+                if give_item in backpack:
+
+                    if inhabitant.give(give_item):
+                        print('Це саме те, що треба!')
+                        current_room.character = None
+                        service = True
+
+                    else:
+                        print('Ви помилилися!')
+                        print('Друг пішов. Шкода')
+                        current_room.character = None
+                        service = True
+
+
     elif command == "битися":
         if inhabitant is not None:
             # Fight with the inhabitant, if there is one
@@ -99,12 +106,12 @@ while dead == False:
                     # What happens if you win?
                     print("Ура!!! Ви виграли!")
                     current_room.character = None
-                    if inhabitant.get_defeated() == 3:
+                    if inhabitant.get_defeated() == 2:
                         print("Вітаю, Ви пройшли гру!")
                         dead = True
                 else:
                     # What happens if you lose?
-                    print("Ох, шкода, алк Ви не справилися.")
+                    print("Ох, шкода, але Ви не справилися.")
                     print("Що ж, це кінець")
                     dead = True
 
