@@ -1,38 +1,59 @@
 import my_game
 
-kitchen = my_game.Room("Kitchen")
-kitchen.set_description("A dank and dirty room buzzing with flies.")
+centre = my_game.Street("Площа Ринок")
+centre.set_description("Центр Львова.")
 
-dining_hall = my_game.Room("Dining Hall")
-dining_hall.set_description("A large room with ornate golden decorations on each wall.")
+street = my_game.Street("вул. Лесі Українки")
+street.set_description("Вулиця з багатьма хорошими закладами.")
 
-ballroom = my_game.Room("Ballroom")
-ballroom.set_description("A vast room with a shiny wooden floor. Huge candlesticks guard the entrance.")
+square = my_game.Street("Галицька Площа")
+square.set_description("Тут знаходиться пам'ятник Данилу Галицькому; місце зустрічі.")
 
-kitchen.link_room(dining_hall, "south")
-dining_hall.link_room(kitchen, "north")
-dining_hall.link_room(ballroom, "west")
-ballroom.link_room(dining_hall, "east")
+centre.link_street(street, "південь")
+street.link_street(centre, "північ")
+street.link_street(square, "захід")
+square.link_street(street, "схід")
 
-dave = my_game.Enemy("Dave", "A smelly zombie")
-dave.set_conversation("What's up, dude! I'm hungry.")
-dave.set_weakness("cheese")
-dining_hall.set_character(dave)
+police = my_game.Enemy("Поліцейський", "Працьовита, але дуже втомлена людина")
+police.set_conversation("Виглядаєте підозріло. Покажіть документи, будь ласка")
+police.set_weakness("паспорт")
+centre.set_character(police)
 
-tabitha = my_game.Enemy("Tabitha", "An enormous spider with countless eyes and furry legs.")
-tabitha.set_conversation("Sssss....I'm so bored...")
-tabitha.set_weakness("book")
-ballroom.set_character(tabitha)
+collegue = my_game.Friend("Максим", "Ваш однокурсник, хороший друг")
+collegue.set_conversation("Друже, я загубив десь на площі свої ключі від колегіуму...\nМені кінець")
+collegue.set_need("ключі")
+square.set_character(collegue)
 
-cheese = my_game.Item("cheese")
-cheese.set_description("A large and smelly block of cheese")
-ballroom.set_item(cheese)
+thief = my_game.Enemy("Злодюжка", "Молодик, що вибрав сумнівний спосіб заробітку")
+thief.set_conversation("Добрі гнроші зараз треба...")
+thief.set_weakness("брелок")
+street.set_character(thief)
 
-book = my_game.Item("book")
-book.set_description("A really good book entitled 'Knitting for dummies'")
-dining_hall.set_item(book)
+# drunkard = my_game.Enemy("П'яничка", "Той самий друг, який ніколи не знає міри...")
+# drunkard.set_conversation("Ти! А ну Йди сюди!")
+# drunkard.set_weakness("вода")
+# square.set_character(drunkard)
 
-current_room = kitchen
+
+ids = my_game.Item("паспорт")
+ids.set_description("Те, що ніколи не варто забувати у друга вдома")
+square.set_item(ids)
+
+keychain = my_game.Item("брелок")
+keychain.set_description("Звичайний брелок, який наспрадві є сигналізацією")
+centre.set_item(keychain)
+
+# water = my_game.Item("вода")
+# water.set_description("Тамує мпрагу та приаодить до тями в певних ситуаціях")
+# street.set_item(water)
+
+key = my_game.Item("ключі")
+key.set_description("Знайомі ключі з емблемою колегіуму...")
+street.set_item(key)
+
+
+current_room = centre
+
 backpack = []
 
 dead = False
@@ -52,17 +73,23 @@ while dead == False:
 
     command = input("> ")
 
-    if command in ["north", "south", "east", "west"]:
+    if command in ["північ", "південь", "схід", "захід"]:
         # Move in the given direction
         current_room = current_room.move(command)
-    elif command == "talk":
+    elif command == "говорити":
         # Talk to the inhabitant - check whether there is one!
         if inhabitant is not None:
             inhabitant.talk()
-    elif command == "fight":
+
+    # elif command == "дати":
+    #     if isinstance(inhabitant, my_game.Friend) is True:
+    #         print('Що Ви хочете дати?')
+    #         if inhabitant.give() is True:
+                
+    elif command == "битися":
         if inhabitant is not None:
             # Fight with the inhabitant, if there is one
-            print("What will you fight with?")
+            print("Чим Ви захищатиметеся?")
             fight_with = input()
 
             # Do I have this item?
@@ -70,27 +97,27 @@ while dead == False:
 
                 if inhabitant.fight(fight_with):
                     # What happens if you win?
-                    print("Hooray, you won the fight!")
+                    print("Ура!!! Ви виграли!")
                     current_room.character = None
-                    if inhabitant.get_defeated() == 2:
-                        print("Congratulations, you have vanquished the enemy horde!")
+                    if inhabitant.get_defeated() == 3:
+                        print("Вітаю, Ви пройшли гру!")
                         dead = True
                 else:
                     # What happens if you lose?
-                    print("Oh dear, you lost the fight.")
-                    print("That's the end of the game")
+                    print("Ох, шкода, алк Ви не справилися.")
+                    print("Що ж, це кінець")
                     dead = True
 
             else:
-                print("You don't have a " + fight_with)
+                print("Ви не маєте " + fight_with)
         else:
-            print("There is no one here to fight with")
-    elif command == "take":
+            print("Ви ще не втрапили в пригоду")
+    elif command == "взяти":
         if item is not None:
-            print("You put the " + item.get_name() + " in your backpack")
+            print("Ви поклали " + item.get_name() + " у Ваш рюкзак")
             backpack.append(item.get_name())
             current_room.set_item(None)
         else:
-            print("There's nothing here to take!")
+            print("Тут нічого нема, щоб щось брати")
     else:
-        print("I don't know how to " + command)
+        print("Я не знаю такого: " + command)

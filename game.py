@@ -89,7 +89,7 @@ class Room:
         self.description = description
 
     def link_room(self, o_room, side):
-        """Sets list of lists with info about nw=earby room/-s"""
+        """Sets list of lists with info about nearby room/-s"""
         inf = []
         inf.append(o_room)
         inf.append(side)
