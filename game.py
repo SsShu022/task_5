@@ -32,7 +32,6 @@ class Enemy:
         self.description = description
         self.conversation = None
         self.weakness = None
-        self.counter = 0
         self.character = None
 
 
@@ -61,7 +60,7 @@ class Enemy:
         if item == self.weakness:
             global COUNTER
             COUNTER += 1
-            print(f'You fend {self.name} off with the {item}. Counter: {COUNTER}')
+            print(f'You fend {self.name} off with the {item}.')
             return True
         else:
             return False
