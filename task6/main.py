@@ -1,3 +1,4 @@
+""""Game"""
 import my_game
 
 centre = my_game.Street("Площа Ринок")
